@@ -82,6 +82,30 @@ def show_author_stats():
     for author, count in stats.items():
         print(f"{author}: прочитано книг — {count}")
 
+def delete_book():
+    books = load_books()
+    if not books:
+        print("Нечего удалять, трекер пуст.")
+        return
+
+    print("\n--- Доступные для удаления книги ---")
+    for idx, book in enumerate(books, 1):
+        print(f"{idx}. {book['author']} — «{book['title']}»")
+
+    while True:
+        try:
+            choice = int(input("\nВведите номер книги для удаления (или 0 для отмены): "))
+            if choice == 0:
+                return
+            if 1 <= choice <= len(books):
+                removed = books.pop(choice - 1)
+                save_books(books)
+                print(f"Книга «{removed['title']}» успешно удалена.")
+                break
+            print("Неверный номер.")
+        except ValueError:
+            print("Введите корректное число.")
+
 def main():
     while True:
         print("\n=== Меню ===")
@@ -103,7 +127,7 @@ def main():
         elif choice == "4":
             show_author_stats()
         elif choice == "5":
-            print("Функционал в разработке...")
+            delete_book()
         elif choice == "6":
             print("До встречи!")
             break
